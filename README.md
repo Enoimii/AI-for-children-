@@ -1,6 +1,7 @@
 # AI-for-children-
 Our Senior project where we designed and built an interactive web app that introduces children to AI using gamified storytelling.
 There are five levels Each level corresponds to a core AI concept, including interactive educational content, engaging visuals, and a related game/puzzle. 
+
 Level 1 - Introduction to AI
 Content: Basic concepts of AI explained in simple terms.
 Game: A quiz where learners match AI terms with their definitions.
@@ -21,4 +22,4 @@ Level 5 - Summary
 Content: Recap of learned concepts and their real-world applications.
 Game: A final test combining elements from all previous levels.
 
-GitHub pages generated link: 
+GitHub pages generated link: https://enoimii.github.io/AI-for-children-/
