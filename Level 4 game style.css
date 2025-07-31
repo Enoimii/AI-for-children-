@@ -1,0 +1,114 @@
+body {
+    font-family: 'Zen Dots', sans-serif;
+   /* font-family: Arial, sans-serif;*/
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin: 20px;
+    gap: 20px;
+}
+
+.drag-area {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    width: 70%; /* Adjust width to give some room */
+    margin: 20px auto; /* Center the area with some margin */
+    box-sizing: border-box; /* Ensure padding doesn't reduce the effective area */
+}
+
+.drop-box {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    height: 400px;
+    width: calc(100% - 40px); /* Ensure some internal space by subtracting from width */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 10px; /* Internal spacing within drop-box */
+    margin: 10px 0; /* Vertical margin to prevent touching the drag-area edge */
+    background-color: #f9f9f9;
+    overflow-y: auto;
+}
+
+
+.drop-box img {
+    max-width: 100px;
+    cursor: pointer;
+}
+
+.info-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin: 20px;
+    gap: 40px;
+    width: 100%;
+}
+
+.feature-table {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    width: 50%;
+}
+
+.graph-area {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    width: 40%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+th{
+    background-color: #38943b;
+}
+
+
+canvas {
+    border: 1px solid #ccc;
+    background-color: #fff;
+
+}
+
+
+/* Basic button styling */
+.next-button {
+    background-color: #4CAF50; /* Green background */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* Change background on hover */
+.next-button:hover {
+    background-color: #45a049;
+}
