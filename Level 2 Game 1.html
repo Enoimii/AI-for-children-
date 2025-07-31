@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Level 2</title>
+    <link rel="icon" href="robot icon.png" type="image/png"> <!-- Add your robot icon here -->
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Prevents scrollbars from appearing */
+        }
+        #background {
+            height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        #alien {
+            width: 15vw;
+            position: absolute;
+            bottom: 5vh;
+            right: 10vw;
+            z-index: 1;
+        }
+        #task-bar {
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+        #right, #left {
+            width: 5vw;
+            position: absolute;
+            top: 10vh;
+            z-index: 1;
+            transition: transform 0.3s ease; /* Smooth transition for the hover effect */
+        }
+        #right {
+            left: 190vh;
+            cursor: pointer;
+        }
+        #left {
+            left: 9vh;
+        }
+        #right:hover, #left:hover {
+            transform: scale(1.2); /* Enlarges the image by 20% when hovered */
+        }
+
+        #homeIcon{
+            width: 3vw;
+            position: absolute;
+            top: 2vh;
+            left: 2.4vh;
+            z-index: 3;
+        }
+        
+        #green-box-darker {
+            width: 40vw; /* Adjust the box size */
+            height: 43vh; /* Set height to fit content */
+            position: absolute;
+            bottom: 44vh; /* Positioned near the scientist */
+            right: 25vw; /* Positioned it beside the scientist */
+            z-index: 3; /* Ensure it appears above other elements */
+        }
+        #green-box-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Centers the content within the blue box */
+            text-align: center; /* Center-aligns the text */
+            font-size: 1.2vw; /* Adjust font size as needed */
+            color: rgb(24, 15, 11); /* Sets the text color */
+            font-family: 'Zen Dots', sans-serif; /* Adjust font as needed */
+            z-index: 4; /* Ensure it appears above other elements */
+            width: 92%; /* Adjust width to fit within the blue box */
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <img id="background" src="Cave Background.png">
+    <img id="alien" src="Alien.png">
+    <img id="task-bar" src="Task bar.png">
+    <img id="right" src="images/right.png" onclick="goToNextLevel()"> 
+    <img id="left" src="left.png">
+
+    <a href="Planet HomePage 2.html"><img id="homeIcon" src="images/homeIcon.jpg"> 
+    </a>
+
+    <!-- Green Box Darker with Content inside -->
+    <div id="green-box-darker">
+        <img src="Pink Box.png" style="width:100%; height:100%;">
+        <div id="green-box-content">
+            <span id="typing-text"></span> <!-- Placeholder for the typing effect -->
+        </div>
+    </div>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet">
+
+    <script>
+        const contentText = "Now it's time to test your BFS skills with a fun game! Help the bunny explore underground tunnels to find a delicious carrot! Here’s how to play: Next Button: Move the bunny to the next glowing circle (node). But wait! The bunny will only move if it’s facing the right way. Rotate Button: Turn the bunny to face the right direction before moving.";
+        let index = 0; // Start from the first character
+        const typingSpeed = 50; // Typing speed in milliseconds
+
+        // Function to type the text
+        function typeText() {
+            if (index < contentText.length) {
+                document.getElementById("typing-text").innerHTML += contentText.charAt(index);
+                index++;
+                setTimeout(typeText, typingSpeed); // Call the function again to simulate typing
+            }
+        }
+
+        // Start typing effect when the page loads
+        window.onload = function() {
+            typeText();
+        };
+
+        // Function to redirect to the next level
+        function goToNextLevel() {
+            window.location.href = "Level 2 Game 2.html"; // Redirect to the next level
+        }
+    </script>
+
+</body>
+</html>
