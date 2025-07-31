@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 2</title>
+    <link rel="icon" href="robot icon.png" type="image/png">
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Prevents scrollbars from appearing */
+            font-family: 'Zen Dots', sans-serif;
+        }
+        #background {
+            height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        #robot {
+            width: 11vw;
+            position: absolute;
+            bottom: 3vh;
+            left: 20vw;
+            z-index: 1;
+        }
+        #player {
+            width: 12vw;
+            position: absolute;
+            bottom: 5vh;
+            left: 9vw;
+            z-index: 1;
+        }
+        #alien {
+            width: 15vw;
+            position: absolute;
+            bottom: 5vh;
+            right: 5vw;
+            z-index: 1;
+        }
+        #task-bar {
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+        #right, #left {
+            width: 5vw;
+            position: absolute;
+            top: 10vh;
+            z-index: 1;
+            transition: transform 0.3s ease; /* Smooth transition for the hover effect */
+        }
+        #right {
+            left: 190vh;
+            cursor: pointer;
+        }
+        #left {
+            left: 9vh;
+        }
+        #right:hover, #left:hover {
+            transform: scale(1.2); /* Enlarges the image by 20% when hovered */
+        }
+
+        /* BFS Tree styling */
+        #bfs-container {
+            position: absolute;
+            bottom: 30vh;
+            left: 5vw;
+            width: 90vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .level {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: lightgray;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 10px;
+            border: 2px solid gray;
+        }
+        .active {
+            background-color: lightblue;
+            border-color: black;
+        }
+        /* Special color for Node K */
+        .goal {
+            background-color: rgb(219, 76, 88);
+            border-color: black;
+        }
+        /* Special color for Node A when visited */
+        .start-visited {
+            background-color: rgb(87, 214, 87); /* Color for visited Node A */
+            border-color: black;
+        }
+        /* Button and visited node log */
+        #start-container {
+            position: absolute;
+            top: 75vh;
+            left: 40vw;
+            z-index: 2;
+        }
+        #start {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Zen Dots', sans-serif;
+        }
+
+
+        
+        #visited-nodes {
+            margin-top: 10px;
+            padding: 10px;
+            border: 2px solid gray;
+            background-color: white;
+            width: 200px;
+            min-height: 50px;
+            font-size: 18px;
+        }
+        /* Explanation log styles */
+        #explanation-log {
+            position: absolute;
+            top: 20vh;
+            left: 5vw;
+            z-index: 2;
+            padding: 10px;
+            border: 2px solid gray;
+            background-color: #f9f9f9;
+            width: 90%;
+            font-size: 18px;
+            font-family: 'Zen Dots', sans-serif;
+        }
+        /* Table styles */
+        #node-table {
+            position: absolute;
+            top: 35vh;
+            right: 10vw; /* Moved next to the right arrow */
+            z-index: 2;
+            border-collapse: collapse;
+            width: 15vw;
+            font-family: 'Zen Dots', sans-serif;
+            font-size: 1vw;
+            border: 3px solid black; /* Outer border */
+            background-color: #f2f2f2
+        }
+
+        #node-table th, #node-table td {
+            border: 1px solid black; /* Inner borders for the cells */
+            padding: 8px;
+            text-align: center;
+        }
+
+        #node-table th {
+            background-color: #f2f2f2;
+        }
+        .pulsing {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.1);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+}
+
+    </style>
+</head>
+<body>
+    <!-- Background and Characters -->
+    <img id="background" src="Level 2 Background.png">
+    <img id="robot" src="Images/Robot.png">
+    <img id="task-bar" src="Task bar.png">
+    <img id="right" src="images/right.png">
+    <img id="left" src="left.png">
+
+    <!-- Explanation log -->
+    <div id="explanation-log">Explanation: Press "Start BFS" to begin.</div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet">
+
+
+    <!-- BFS Game Tree -->
+    <div id="bfs-container">
+        <div class="node" id="A">A</div>
+        <div class="level">
+            <div class="node" id="B">B</div>
+            <div class="node" id="C">C</div>
+        </div>
+        <div class="level">
+            <div class="node" id="D">D</div>
+            <div class="node" id="E">E</div>
+            <div class="node" id="F">F</div>
+            <div class="node" id="G">G</div>
+        </div>
+        <div class="level">
+            <div class="node" id="H">H</div>
+            <div class="node" id="I">I</div>
+            <div class="node" id="J">J</div>
+            <div class="node" id="K">K</div>
+            <div class="node" id="L">L</div>
+            <div class="node" id="M">M</div>
+            <div class="node" id="N">N</div>
+            <div class="node" id="O">O</div>
+        </div>
+    </div>
+
+    <!-- Start BFS button and visited node log -->
+    <div id="start-container">
+        <button id="start">Start BFS</button>
+        <div id="visited-nodes">Visited Nodes: </div>
+    </div>
+
+    <!-- Table for Parent-Children Nodes -->
+    <table id="node-table">
+        <thead>
+            <tr>
+                <th>Parent Node</th>
+                <th>Children Nodes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>A</td>
+                <td>B, C</td>
+            </tr>
+            <tr>
+                <td>B</td>
+                <td>D, E</td>
+            </tr>
+            <tr>
+                <td>C</td>
+                <td>F, G</td>
+            </tr>
+            <tr>
+                <td>D</td>
+                <td>H,I</td> 
+            </tr>
+            <tr>
+                <td>E</td>
+                <td>J, K</td>
+            </tr>
+            <tr>
+                <td>F</td>
+                <td>L,M</td> 
+            </tr>
+            <tr>
+                <td>G</td>
+                <td>N,O</td> 
+            </tr>
+            <tr>
+                <td>H,I,J,K</td>
+                <td>None</td> <!-- H is the final goal node -->
+            </tr>
+            <tr>
+                <td>L,M,N,O</td>
+                <td>None</td> <!-- H is the final goal node -->
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // Nodes and edges (children of each node)
+        const tree = {
+            A: ['B', 'C'],
+            B: ['D', 'E'],
+            C: ['F', 'G'],
+            D: ['H', 'I'],
+            E: ['J', 'K'],
+            F: ['L', 'M'],
+            G: ['N', 'O'],
+            H: [], I: [], J: [], K: [], L: [], M: [], N: [], O: []
+        };
+
+                // Explanation messages for each node
+                const explanations = {
+            A: "Starting at node A. Its neighbors are B and C. Node B is visited first because it was added to the queue first.",
+            B: "Node B is visited. Its neighbors are D and E. Node D is chosen next, following BFS's level-order rule.",
+            C: "Node C is visited after B. Its neighbors F and G are added to the queue.",
+            D: "Node D is visited. Its neighbors are H and I, which are added to the queue.",
+            E: "Node E is visited. Its neighbors are J and the goal node K. Node J is processed first.",
+            F: "Node F is visited. It has no neighbors, so we move on.",
+            G: "Node G is visited. It has no neighbors, so we continue.",
+            H: "Node H is visited. It has no neighbors.",
+            I: "Node I is visited. It has no neighbors.",
+            J: "Node J is visited. It has no neighbors.",
+            K: "Node K is visited. This is the goal node! The search ends here."
+        };
+
+        // Declare a variable to control the interval
+        let interval;
+        let paused = false;
+        let resumeIndex = 0;  // Track the last visited index for resuming
+
+// Breadth First Search function
+function bfs() {
+    const queue = ['A']; // Start from the root node
+    let index = 0;
+    const visitedContainer = document.getElementById('visited-nodes');
+    const explanationLog = document.getElementById('explanation-log'); // Access the explanation log
+    visitedContainer.innerHTML = 'Visited Nodes: '; // Reset visited nodes
+    explanationLog.innerHTML = 'Explanation: Starting BFS...'; // Reset explanation log
+
+    let previousNode = null; // Track the previous node to remove the pulsing animation
+
+    interval = setInterval(() => {
+        if (index >= queue.length || paused) {
+            clearInterval(interval); // Stop the BFS if paused or completed
+            if (paused) {
+                explanationLog.innerHTML = explanationLog.innerHTML; // Keep the last explanation visible
+            } else {
+                explanationLog.innerHTML = 'Explanation: BFS complete. Goal node not found!';
+            }
+            return;
+        }
+
+        const currentNode = queue[index];
+
+        // Update explanation box with the specific message for the current node
+        explanationLog.innerHTML = explanations[currentNode] || `Visiting node ${currentNode}...`;
+
+        // Remove pulsing animation from the previous node
+        if (previousNode) {
+            document.getElementById(previousNode).classList.remove('pulsing');
+        }
+
+        // Change the color and add pulsing animation to the current node
+        if (currentNode === 'A') {
+            document.getElementById(currentNode).classList.add('start-visited', 'pulsing');
+        } else if (currentNode === 'K') {
+            document.getElementById(currentNode).classList.add('goal', 'pulsing'); // Special color for Node K
+            setTimeout(() => {
+                document.getElementById(currentNode).classList.remove('pulsing'); // Remove pulsing after 5 seconds
+            }, 5000);
+        } else {
+            document.getElementById(currentNode).classList.add('active', 'pulsing'); // Highlight and pulse other nodes
+        }
+
+        // Log visited node except for nodes L, M, N, O
+        if (currentNode !== 'L' && currentNode !== 'M' && currentNode !== 'N' && currentNode !== 'O') {
+            visitedContainer.innerHTML += currentNode + ' ';
+        }
+
+        // Stop the game when Node K is reached
+        if (currentNode === 'K') {
+            clearInterval(interval); // Stop BFS
+            return;
+        }
+
+        // Add child nodes to the queue
+        queue.push(...tree[currentNode]);
+
+        // Set the current node as the previous node for the next iteration
+        previousNode = currentNode;
+
+        index++;
+        resumeIndex = index; // Update resume index
+    }, 5000); // Interval of 5 seconds between each step
+}
+
+
+        
+        
+        // Start BFS on button click
+        document.getElementById('start').addEventListener('click', bfs);
+
+        // Redirect to Level 2 test 3.html on right arrow click
+        document.getElementById('right').addEventListener('click', () => {
+            window.location.href = 'Level 2 test 3.html';
+        });
+    </script>
+</body>
+</html>

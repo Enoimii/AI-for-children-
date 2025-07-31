@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 3</title>
+    <link rel="icon" href="robot icon.png" type="image/png"> <!-- Add your robot icon here -->
+    <style>
+        body {
+            font-family: 'Zen Dots', sans-serif;
+            text-align: center;
+            background-color: #C2EAE0;
+        }
+        h1 {
+            color: #333;
+        }
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 5vh;
+        }
+        .robot {
+            font-size: 2.4vw;
+            margin-bottom: 1vh;
+        }
+        .instructions {
+            font-size: 1.8vw;
+            margin-bottom: 2vh;
+        }
+        .fruit-container, .classification-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .fruit {
+            width: 7vw;
+            margin: 1vh;
+            cursor: grab;
+        }
+        .classification-box {
+            width: 35vw;
+            height: 40vh;
+            border: 0.2vw dashed #ccc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            margin: 1vh;
+            font-size: 1.8vw;
+            color: #555;
+            overflow-y: auto;
+        }
+        #next-button {
+            display: block; /* Show the button immediately */
+            position: relative;
+            margin-top: 20px;
+            padding: 1vh 2vw;
+            font-size: 1.8vw;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0.5vw;
+            cursor: pointer;
+            font-family: 'Zen Dots', sans-serif;
+        }    
+
+        
+    </style>
+</head>
+<body>
+<h1>Help the Robot Classify Fruits!</h1>
+
+<div class="game-container">
+    <div class="robot" id="robot">Hi! Can you help me classify these fruits?</div>
+    <div class="instructions">Drag each fruit into the correct box below.</div>
+
+    <div class="fruit-container" id="fruit-container">
+        <img src="images/apple1 new.png" alt="Apple" class="fruit" data-tag="1" draggable="true">
+        <img src="images/apple2 new.png" alt="Apple" class="fruit" data-tag="1" draggable="true">
+        <img src="images/apple3 new.png" alt="Apple" class="fruit" data-tag="1" draggable="true">
+        <img src="images/apple4 new.png" alt="Apple" class="fruit" data-tag="1" draggable="true">
+        <img src="images/apple5 new.png" alt="Apple" class="fruit" data-tag="1" draggable="true">
+        <img src="images/apple6 new.png" alt="Apple" class="fruit" data-tag="1" draggable="true">
+        <img src="images/apple7 new.png" alt="Apple" class="fruit" data-tag="1" draggable="true">
+        <img src="images/orange1 new.png" alt="Orange" class="fruit" data-tag="2" draggable="true">
+        <img src="images/orange2 new.png" alt="Orange" class="fruit" data-tag="2" draggable="true">
+        <img src="images/orange3 new.png" alt="Orange" class="fruit" data-tag="2" draggable="true">
+        <img src="images/orange4 new.png" alt="Orange" class="fruit" data-tag="2" draggable="true">
+        <img src="images/orange5 new.png" alt="Orange" class="fruit" data-tag="2" draggable="true">
+        <img src="images/orange6 new.png" alt="Orange" class="fruit" data-tag="2" draggable="true">
+        <img src="images/orange7 new.png" alt="Orange" class="fruit" data-tag="2" draggable="true">
+        <img src="images/banana1 new.png" alt="Banana" class="fruit" data-tag="3" draggable="true">
+        <img src="images/banana2 new.png" alt="Banana" class="fruit" data-tag="3" draggable="true">
+        <img src="images/banana3 new.png" alt="Banana" class="fruit" data-tag="3" draggable="true">
+        <img src="images/banana4 new.png" alt="Banana" class="fruit" data-tag="3" draggable="true">
+        <img src="images/banana5 new.png" alt="Banana" class="fruit" data-tag="3" draggable="true">
+        <img src="images/banana6 new.png" alt="Banana" class="fruit" data-tag="3" draggable="true">
+        <img src="images/banana7 new.png" alt="Banana" class="fruit" data-tag="3" draggable="true">
+        <img src="images/strawberry1 new.png" alt="Strawberry" class="fruit" data-tag="4" draggable="true">
+        <img src="images/strawberry2 new.png" alt="Strawberry" class="fruit" data-tag="4" draggable="true">
+        <img src="images/strawberry3 new.png" alt="Strawberry" class="fruit" data-tag="4" draggable="true">
+        <img src="images/strawberry4 new.png" alt="Strawberry" class="fruit" data-tag="4" draggable="true">
+        <img src="images/strawberry5 new.png" alt="Strawberry" class="fruit" data-tag="4" draggable="true">
+        <img src="images/strawberry6 new.png" alt="Strawberry" class="fruit" data-tag="4" draggable="true">
+        <img src="images/strawberry7 new.png" alt="Strawberry" class="fruit" data-tag="4" draggable="true">
+    </div>
+
+    <div class="classification-area">
+        <div class="classification-box" id="apple-box" data-accept="1">Apples</div>
+        <div class="classification-box" id="orange-box" data-accept="2">Oranges</div>
+        <div class="classification-box" id="banana-box" data-accept="3">Bananas</div>
+        <div class="classification-box" id="strawberry-box" data-accept="4">Strawberries</div>
+    </div>
+
+    <!-- Button is now visible immediately for the user to go to the next page anytime -->
+    <button id="next-button" onclick="goToNextPage()">Go to Robot Testing</button>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet">
+</div>
+
+<script>
+    const fruits = document.querySelectorAll('.fruit');
+    const classificationBoxes = document.querySelectorAll('.classification-box');
+    let currentFruitIndex = 0;
+
+    // Initially hide all fruits except the first one
+    fruits.forEach((fruit, index) => {
+        fruit.style.display = index === 0 ? 'block' : 'none';
+        fruit.addEventListener('dragstart', dragStart);
+    });
+
+    function dragStart(event) {
+        event.dataTransfer.setData('fruitType', event.target.getAttribute('data-tag'));
+        event.dataTransfer.setData('fruitIndex', currentFruitIndex);
+    }
+
+    classificationBoxes.forEach(box => {
+        box.addEventListener('dragover', dragOver);
+        box.addEventListener('drop', drop);
+    });
+
+    function dragOver(event) {
+        event.preventDefault();
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        const fruitElement = fruits[currentFruitIndex];
+        event.target.appendChild(fruitElement); // Append fruit to the dropped box
+
+        // Move to the next fruit, whether it was the correct box or not
+        currentFruitIndex++;
+        if (currentFruitIndex < fruits.length) {
+            fruits[currentFruitIndex].style.display = 'block'; // Show the next fruit
+        }
+    }
+
+    function goToNextPage() {
+        window.location.href = 'Classification game 2.html';
+    }
+</script>
+
+</body>
+</html>
+
